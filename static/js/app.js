@@ -160,12 +160,15 @@ function updateAnchorPreview() {
   const rand = Math.random();
   const style = state.project?.character_profile?.style_tag || document.getElementById("styleSelect")?.value;
   
-  if (style === "vyond_beach_family") {
+  if (style === "authentic_beach_with_boy" || style === "hybrid_beach_boy") {
     img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
-    img.onerror = () => { img.src = "/assets/characters/beach_family_replica.png"; };
-  } else if (style === "green_screen_modern_boy") {
+    img.onerror = () => { img.src = "/assets/stock_animations/thumb_composite_beach_boy.png"; };
+  } else if (style === "authentic_beach_family" || style === "vyond_beach_family") {
     img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
-    img.onerror = () => { img.src = "/assets/characters/green_screen_modern_boy.png"; };
+    img.onerror = () => { img.src = "/assets/stock_animations/thumb_beach_family.png"; };
+  } else if (style === "authentic_green_screen_boy" || style === "green_screen_modern_boy") {
+    img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
+    img.onerror = () => { img.src = "/assets/stock_animations/thumb_boy_green_screen.png"; };
   } else {
     img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
     img.onerror = () => { img.src = "/assets/characters/anchor.png"; };

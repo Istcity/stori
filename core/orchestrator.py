@@ -85,12 +85,29 @@ class StoryTimeOrchestrator:
         project = self.load_project(project_id)
         proj_dir = self.get_project_dir(project_id)
         anchor_path = proj_dir / "anchor.png"
-        self.character_engine.generate_character_anchor(
-            character_name=project.character_profile.name,
-            palette=project.character_profile.palette,
-            out_path=anchor_path,
-            style_tag=project.character_profile.style_tag
-        )
+        style_tag = project.character_profile.style_tag
+
+        stock_dir = self.workspace_root / "assets" / "stock_animations"
+        if style_tag in ["authentic_beach_with_boy", "hybrid_beach_boy"]:
+            src = stock_dir / "thumb_composite_beach_boy.png"
+            if src.exists():
+                shutil.copy(src, anchor_path)
+        elif style_tag in ["authentic_beach_family", "vyond_beach_family"]:
+            src = stock_dir / "thumb_beach_family.png"
+            if src.exists():
+                shutil.copy(src, anchor_path)
+        elif style_tag in ["authentic_green_screen_boy", "green_screen_modern_boy"]:
+            src = stock_dir / "thumb_boy_green_screen.png"
+            if src.exists():
+                shutil.copy(src, anchor_path)
+        else:
+            self.character_engine.generate_character_anchor(
+                character_name=project.character_profile.name,
+                palette=project.character_profile.palette,
+                out_path=anchor_path,
+                style_tag=style_tag
+            )
+
         project.character_profile.anchor_image_path = f"projects/{project_id}/anchor.png"
         self.save_project(project)
         return anchor_path
@@ -123,46 +140,72 @@ class StoryTimeOrchestrator:
         proj_dir = self.get_project_dir(project_id)
         palette = project.character_profile.palette
         style_tag = project.character_profile.style_tag
+        stock_dir = self.workspace_root / "assets" / "stock_animations"
+
+        beach_video = stock_dir / "scene_beach_family.mp4"
+        boy_video = stock_dir / "character_boy_green_screen.mp4"
 
         for scene in project.scenes:
             if progress_cb:
-                progress_cb(f"Rendering Scene {scene.scene_id} [{style_tag}]: {scene.character_action[:40]}...")
+                progress_cb(f"Rendering Authentic Scene {scene.scene_id} [{style_tag}]: {scene.character_action[:40]}...")
 
-            # 1. Render base action plate
             plate_path = proj_dir / "scenes" / "images" / f"s{scene.scene_id}.png"
-            self.character_engine.generate_scene_image(
-                scene_id=scene.scene_id,
-                scene_type=scene.scene_type,
-                character_action=scene.character_action,
-                camera_shot=scene.camera_shot,
-                visual_prompt=scene.visual_prompt,
-                emotion=scene.character_emotion,
-                palette=palette,
-                out_path=plate_path,
-                style_tag=style_tag
-            )
-            scene.assets.image_plate = f"projects/{project_id}/scenes/images/s{scene.scene_id}.png"
-
-            # 2. Render 30fps animation MP4
             clip_path = proj_dir / "scenes" / "clips" / f"s{scene.scene_id}.mp4"
             audio_clip_path = proj_dir / "scenes" / "audio" / f"s{scene.scene_id}.wav"
 
-            if style_tag == "vyond_beach_family":
-                self.character_engine.vyond_artist.render_vyond_video(
-                    theme="tropical_beach",
+            # 1. Authentic Video Animation Pipeline matching user downloaded reference movies
+            if style_tag in ["authentic_beach_with_boy", "hybrid_beach_boy"] and beach_video.exists() and boy_video.exists():
+                thumb_src = stock_dir / "thumb_composite_beach_boy.png"
+                if thumb_src.exists():
+                    shutil.copy(thumb_src, plate_path)
+
+                self.video_engine.render_chroma_composite(
+                    bg_source=beach_video,
+                    character_source=boy_video,
                     duration_sec=scene.duration_sec,
+                    out_mp4=clip_path,
                     audio_clip_path=audio_clip_path if audio_clip_path.exists() else None,
-                    out_mp4=clip_path
+                    char_scale_height=520,
+                    pos_x=140 + (scene.scene_id * 80) % 400
                 )
-            elif style_tag == "green_screen_modern_boy":
-                self.character_engine.vyond_artist.render_vyond_video(
-                    theme="green_screen",
-                    green_screen=True,
+
+            elif style_tag in ["authentic_beach_family", "vyond_beach_family"] and beach_video.exists():
+                thumb_src = stock_dir / "thumb_beach_family.png"
+                if thumb_src.exists():
+                    shutil.copy(thumb_src, plate_path)
+
+                self.video_engine.render_looped_scene_video(
+                    scene_source=beach_video,
                     duration_sec=scene.duration_sec,
-                    audio_clip_path=audio_clip_path if audio_clip_path.exists() else None,
-                    out_mp4=clip_path
+                    out_mp4=clip_path,
+                    audio_clip_path=audio_clip_path if audio_clip_path.exists() else None
                 )
+
+            elif style_tag in ["authentic_green_screen_boy", "green_screen_modern_boy"] and boy_video.exists():
+                thumb_src = stock_dir / "thumb_boy_green_screen.png"
+                if thumb_src.exists():
+                    shutil.copy(thumb_src, plate_path)
+
+                self.video_engine.render_looped_scene_video(
+                    scene_source=boy_video,
+                    duration_sec=scene.duration_sec,
+                    out_mp4=clip_path,
+                    audio_clip_path=audio_clip_path if audio_clip_path.exists() else None
+                )
+
             else:
+                # Procedural Action Storytime Fallback
+                self.character_engine.generate_scene_image(
+                    scene_id=scene.scene_id,
+                    scene_type=scene.scene_type,
+                    character_action=scene.character_action,
+                    camera_shot=scene.camera_shot,
+                    visual_prompt=scene.visual_prompt,
+                    emotion=scene.character_emotion,
+                    palette=palette,
+                    out_path=plate_path,
+                    style_tag=style_tag
+                )
                 self.motion_engine.render_action_scene_video(
                     scene_id=scene.scene_id,
                     scene_type=scene.scene_type,
@@ -178,6 +221,7 @@ class StoryTimeOrchestrator:
                     out_mp4=clip_path
                 )
 
+            scene.assets.image_plate = f"projects/{project_id}/scenes/images/s{scene.scene_id}.png"
             scene.assets.video_clip = f"projects/{project_id}/scenes/clips/s{scene.scene_id}.mp4"
             scene.status = "ready"
 

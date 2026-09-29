@@ -15,21 +15,21 @@
   },
   "character_profile": {
     "name": "Sinan",
-    "style_tag": "2d_minimalist_vector_storytime_cartoon",
+    "style_tag": "authentic_beach_with_boy",
     "description": "Young adult, messy dark brown hair, oversized blue hoodie, expressive facial features",
     "anchor_image_path": "projects/demo_story/anchor.png",
     "palette": {
-      "hair": "#2D1B18",
-      "skin": "#FFE0BD",
-      "hoodie": "#2563EB",
-      "line": "#1E293B"
+      "hair": "#2d1b18",
+      "skin": "#ffe0bd",
+      "hoodie": "#2563eb",
+      "line": "#1e293b"
     }
   },
   "scenes": [
     {
       "scene_id": 1,
       "order": 1,
-      "duration_sec": 3.8,
+      "duration_sec": 5.89,
       "narration_text": "O gün hayatımın en büyük rezilliğini yaşayacağımdan tamamen habersizdim.",
       "scene_type": "reaction_shot",
       "character_action": "Sinan's face turns completely tomato-red, sinking into oversized hoodie collar like a cartoon turtle while smoke billows from ears",
@@ -45,15 +45,202 @@
         "audio_clip": "projects/demo_story/scenes/audio/s1.wav",
         "image_plate": "projects/demo_story/scenes/images/s1.png",
         "video_clip": "projects/demo_story/scenes/clips/s1.mp4",
-        "mouth_cues": null,
-        "word_timestamps": null
+        "mouth_cues": [
+          {
+            "time": 0.0,
+            "viseme": "open_o",
+            "duration": 0.616
+          },
+          {
+            "time": 0.616,
+            "viseme": "open_o",
+            "duration": 0.616
+          },
+          {
+            "time": 1.232,
+            "viseme": "open_a",
+            "duration": 0.154
+          },
+          {
+            "time": 1.386,
+            "viseme": "open_a",
+            "duration": 0.154
+          },
+          {
+            "time": 1.54,
+            "viseme": "open_a",
+            "duration": 0.154
+          },
+          {
+            "time": 1.694,
+            "viseme": "open_a",
+            "duration": 0.154
+          },
+          {
+            "time": 1.848,
+            "viseme": "wide_e",
+            "duration": 0.616
+          },
+          {
+            "time": 2.464,
+            "viseme": "open_o",
+            "duration": 0.308
+          },
+          {
+            "time": 2.772,
+            "viseme": "open_o",
+            "duration": 0.308
+          },
+          {
+            "time": 3.08,
+            "viseme": "wide_e",
+            "duration": 0.123
+          },
+          {
+            "time": 3.203,
+            "viseme": "wide_e",
+            "duration": 0.123
+          },
+          {
+            "time": 3.326,
+            "viseme": "wide_e",
+            "duration": 0.123
+          },
+          {
+            "time": 3.45,
+            "viseme": "wide_e",
+            "duration": 0.123
+          },
+          {
+            "time": 3.573,
+            "viseme": "wide_e",
+            "duration": 0.123
+          },
+          {
+            "time": 3.696,
+            "viseme": "open_a",
+            "duration": 0.103
+          },
+          {
+            "time": 3.799,
+            "viseme": "open_a",
+            "duration": 0.103
+          },
+          {
+            "time": 3.901,
+            "viseme": "open_a",
+            "duration": 0.103
+          },
+          {
+            "time": 4.004,
+            "viseme": "open_a",
+            "duration": 0.103
+          },
+          {
+            "time": 4.107,
+            "viseme": "open_a",
+            "duration": 0.103
+          },
+          {
+            "time": 4.209,
+            "viseme": "open_a",
+            "duration": 0.103
+          },
+          {
+            "time": 4.312,
+            "viseme": "open_a",
+            "duration": 0.205
+          },
+          {
+            "time": 4.517,
+            "viseme": "open_a",
+            "duration": 0.205
+          },
+          {
+            "time": 4.723,
+            "viseme": "wide_e",
+            "duration": 0.205
+          },
+          {
+            "time": 4.928,
+            "viseme": "open_a",
+            "duration": 0.154
+          },
+          {
+            "time": 5.082,
+            "viseme": "wide_e",
+            "duration": 0.154
+          },
+          {
+            "time": 5.236,
+            "viseme": "wide_e",
+            "duration": 0.154
+          },
+          {
+            "time": 5.39,
+            "viseme": "wide_e",
+            "duration": 0.154
+          },
+          {
+            "time": 5.594,
+            "viseme": "closed",
+            "duration": 0.3460000000000001
+          }
+        ],
+        "word_timestamps": [
+          {
+            "word": "O",
+            "start": 0.0,
+            "end": 0.616
+          },
+          {
+            "word": "gün",
+            "start": 0.616,
+            "end": 1.232
+          },
+          {
+            "word": "hayatımın",
+            "start": 1.232,
+            "end": 1.848
+          },
+          {
+            "word": "en",
+            "start": 1.848,
+            "end": 2.464
+          },
+          {
+            "word": "büyük",
+            "start": 2.464,
+            "end": 3.08
+          },
+          {
+            "word": "rezilliğini",
+            "start": 3.08,
+            "end": 3.696
+          },
+          {
+            "word": "yaşayacağımdan",
+            "start": 3.696,
+            "end": 4.312
+          },
+          {
+            "word": "tamamen",
+            "start": 4.312,
+            "end": 4.928
+          },
+          {
+            "word": "habersizdim.",
+            "start": 4.928,
+            "end": 5.544
+          }
+        ]
       },
       "status": "ready"
     },
     {
       "scene_id": 2,
       "order": 2,
-      "duration_sec": 3.0,
+      "duration_sec": 4.4799999999999995,
       "narration_text": "Sabah erkenden kalkıp okula doğru yola çıktım.",
       "scene_type": "environmental_gag",
       "character_action": "Sinan gesticulates wildly, flailing arms in cartoon agitation while background objects wobble",
@@ -69,15 +256,137 @@
         "audio_clip": "projects/demo_story/scenes/audio/s2.wav",
         "image_plate": "projects/demo_story/scenes/images/s2.png",
         "video_clip": "projects/demo_story/scenes/clips/s2.mp4",
-        "mouth_cues": null,
-        "word_timestamps": null
+        "mouth_cues": [
+          {
+            "time": 0.0,
+            "viseme": "open_a",
+            "duration": 0.295
+          },
+          {
+            "time": 0.295,
+            "viseme": "open_a",
+            "duration": 0.295
+          },
+          {
+            "time": 0.59,
+            "viseme": "wide_e",
+            "duration": 0.196
+          },
+          {
+            "time": 0.786,
+            "viseme": "wide_e",
+            "duration": 0.196
+          },
+          {
+            "time": 0.983,
+            "viseme": "wide_e",
+            "duration": 0.196
+          },
+          {
+            "time": 1.179,
+            "viseme": "open_a",
+            "duration": 0.295
+          },
+          {
+            "time": 1.474,
+            "viseme": "open_a",
+            "duration": 0.295
+          },
+          {
+            "time": 1.769,
+            "viseme": "open_o",
+            "duration": 0.197
+          },
+          {
+            "time": 1.966,
+            "viseme": "open_o",
+            "duration": 0.197
+          },
+          {
+            "time": 2.162,
+            "viseme": "open_a",
+            "duration": 0.197
+          },
+          {
+            "time": 2.359,
+            "viseme": "open_o",
+            "duration": 0.295
+          },
+          {
+            "time": 2.654,
+            "viseme": "open_o",
+            "duration": 0.295
+          },
+          {
+            "time": 2.949,
+            "viseme": "open_o",
+            "duration": 0.294
+          },
+          {
+            "time": 3.244,
+            "viseme": "open_a",
+            "duration": 0.294
+          },
+          {
+            "time": 3.538,
+            "viseme": "open_a",
+            "duration": 0.295
+          },
+          {
+            "time": 3.833,
+            "viseme": "open_a",
+            "duration": 0.295
+          },
+          {
+            "time": 4.178,
+            "viseme": "closed",
+            "duration": 0.3519999999999994
+          }
+        ],
+        "word_timestamps": [
+          {
+            "word": "Sabah",
+            "start": 0.0,
+            "end": 0.59
+          },
+          {
+            "word": "erkenden",
+            "start": 0.59,
+            "end": 1.179
+          },
+          {
+            "word": "kalkıp",
+            "start": 1.179,
+            "end": 1.769
+          },
+          {
+            "word": "okula",
+            "start": 1.769,
+            "end": 2.359
+          },
+          {
+            "word": "doğru",
+            "start": 2.359,
+            "end": 2.949
+          },
+          {
+            "word": "yola",
+            "start": 2.949,
+            "end": 3.538
+          },
+          {
+            "word": "çıktım.",
+            "start": 3.538,
+            "end": 4.128
+          }
+        ]
       },
       "status": "ready"
     },
     {
       "scene_id": 3,
       "order": 3,
-      "duration_sec": 3.8,
+      "duration_sec": 5.7299999999999995,
       "narration_text": "Birden pantolonumun arkasının boydan boya yırtık olduğunu fark ettim!",
       "scene_type": "slapstick",
       "character_action": "Sinan freezes in terror, reaching behind in frantic disbelief as cold wind blows through a massive cartoon tear in trousers",
@@ -93,13 +402,185 @@
         "audio_clip": "projects/demo_story/scenes/audio/s3.wav",
         "image_plate": "projects/demo_story/scenes/images/s3.png",
         "video_clip": "projects/demo_story/scenes/clips/s3.mp4",
-        "mouth_cues": null,
-        "word_timestamps": null
+        "mouth_cues": [
+          {
+            "time": 0.0,
+            "viseme": "wide_e",
+            "duration": 0.298
+          },
+          {
+            "time": 0.298,
+            "viseme": "wide_e",
+            "duration": 0.298
+          },
+          {
+            "time": 0.597,
+            "viseme": "open_a",
+            "duration": 0.12
+          },
+          {
+            "time": 0.717,
+            "viseme": "open_o",
+            "duration": 0.12
+          },
+          {
+            "time": 0.836,
+            "viseme": "open_o",
+            "duration": 0.12
+          },
+          {
+            "time": 0.956,
+            "viseme": "open_o",
+            "duration": 0.12
+          },
+          {
+            "time": 1.075,
+            "viseme": "open_o",
+            "duration": 0.12
+          },
+          {
+            "time": 1.195,
+            "viseme": "open_a",
+            "duration": 0.149
+          },
+          {
+            "time": 1.344,
+            "viseme": "open_a",
+            "duration": 0.149
+          },
+          {
+            "time": 1.494,
+            "viseme": "open_a",
+            "duration": 0.149
+          },
+          {
+            "time": 1.643,
+            "viseme": "open_a",
+            "duration": 0.149
+          },
+          {
+            "time": 1.792,
+            "viseme": "open_o",
+            "duration": 0.298
+          },
+          {
+            "time": 2.091,
+            "viseme": "open_a",
+            "duration": 0.298
+          },
+          {
+            "time": 2.389,
+            "viseme": "open_o",
+            "duration": 0.299
+          },
+          {
+            "time": 2.688,
+            "viseme": "open_a",
+            "duration": 0.299
+          },
+          {
+            "time": 2.987,
+            "viseme": "open_a",
+            "duration": 0.298
+          },
+          {
+            "time": 3.285,
+            "viseme": "open_a",
+            "duration": 0.298
+          },
+          {
+            "time": 3.584,
+            "viseme": "open_o",
+            "duration": 0.149
+          },
+          {
+            "time": 3.733,
+            "viseme": "open_o",
+            "duration": 0.149
+          },
+          {
+            "time": 3.883,
+            "viseme": "open_o",
+            "duration": 0.149
+          },
+          {
+            "time": 4.032,
+            "viseme": "open_o",
+            "duration": 0.149
+          },
+          {
+            "time": 4.181,
+            "viseme": "open_a",
+            "duration": 0.598
+          },
+          {
+            "time": 4.779,
+            "viseme": "wide_e",
+            "duration": 0.299
+          },
+          {
+            "time": 5.078,
+            "viseme": "wide_e",
+            "duration": 0.299
+          },
+          {
+            "time": 5.427,
+            "viseme": "closed",
+            "duration": 0.35299999999999887
+          }
+        ],
+        "word_timestamps": [
+          {
+            "word": "Birden",
+            "start": 0.0,
+            "end": 0.597
+          },
+          {
+            "word": "pantolonumun",
+            "start": 0.597,
+            "end": 1.195
+          },
+          {
+            "word": "arkasının",
+            "start": 1.195,
+            "end": 1.792
+          },
+          {
+            "word": "boydan",
+            "start": 1.792,
+            "end": 2.389
+          },
+          {
+            "word": "boya",
+            "start": 2.389,
+            "end": 2.987
+          },
+          {
+            "word": "yırtık",
+            "start": 2.987,
+            "end": 3.584
+          },
+          {
+            "word": "olduğunu",
+            "start": 3.584,
+            "end": 4.181
+          },
+          {
+            "word": "fark",
+            "start": 4.181,
+            "end": 4.779
+          },
+          {
+            "word": "ettim!",
+            "start": 4.779,
+            "end": 5.376
+          }
+        ]
       },
       "status": "ready"
     }
   ],
   "output_video_path": "projects/demo_story/output/final_storytime.mp4",
   "created_at": "2026-09-28 17:26:44",
-  "updated_at": "2026-09-28 17:29:00"
+  "updated_at": "2026-09-29 16:27:30"
 }

@@ -238,5 +238,92 @@ class VideoAssemblyEngine:
         subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
         return out_final_mp4
 
+    def render_chroma_composite(
+        self,
+        bg_source: Path,
+        character_source: Path,
+        duration_sec: float,
+        out_mp4: Path,
+        audio_clip_path: Optional[Path] = None,
+        char_scale_height: int = 540,
+        pos_x: int = 140,
+        chroma_hex: str = "0x1cd120",
+        similarity: float = 0.32,
+        blend: float = 0.08
+    ) -> Path:
+        """
+        Composites authentic green-screen character animation onto authentic animated scene background.
+        Removes chroma-key with high-fidelity spill suppression and loops seamlessly.
+        """
+        out_mp4.parent.mkdir(parents=True, exist_ok=True)
+        cmd = [
+            "ffmpeg", "-y",
+            "-stream_loop", "-1", "-i", str(bg_source),
+            "-stream_loop", "-1", "-i", str(character_source)
+        ]
+        if audio_clip_path and audio_clip_path.exists():
+            cmd.extend(["-i", str(audio_clip_path)])
+
+        filter_str = (
+            f"[1:v]colorkey={chroma_hex}:{similarity}:{blend},scale=-1:{char_scale_height}[char];"
+            f"[0:v]scale=1920:1080[bg];"
+            f"[bg][char]overlay=x={pos_x}:y=H-h-20[outv]"
+        )
+
+        cmd.extend([
+            "-filter_complex", filter_str,
+            "-map", "[outv]"
+        ])
+
+        if audio_clip_path and audio_clip_path.exists():
+            cmd.extend(["-map", "2:a", "-c:a", "aac", "-b:a", "192k"])
+
+        cmd.extend([
+            "-t", str(round(duration_sec, 2)),
+            "-c:v", "libx264",
+            "-preset", "ultrafast",
+            "-crf", "19",
+            str(out_mp4)
+        ])
+
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return out_mp4
+
+    def render_looped_scene_video(
+        self,
+        scene_source: Path,
+        duration_sec: float,
+        out_mp4: Path,
+        audio_clip_path: Optional[Path] = None
+    ) -> Path:
+        """
+        Loops an authentic animated video clip to match the exact duration of the voiceover.
+        """
+        out_mp4.parent.mkdir(parents=True, exist_ok=True)
+        cmd = [
+            "ffmpeg", "-y",
+            "-stream_loop", "-1", "-i", str(scene_source)
+        ]
+        if audio_clip_path and audio_clip_path.exists():
+            cmd.extend(["-i", str(audio_clip_path)])
+
+        cmd.extend([
+            "-vf", "scale=1920:1080",
+            "-map", "0:v"
+        ])
+        if audio_clip_path and audio_clip_path.exists():
+            cmd.extend(["-map", "1:a", "-c:a", "aac", "-b:a", "192k"])
+
+        cmd.extend([
+            "-t", str(round(duration_sec, 2)),
+            "-c:v", "libx264",
+            "-preset", "ultrafast",
+            "-crf", "19",
+            str(out_mp4)
+        ])
+
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return out_mp4
+
 if __name__ == "__main__":
     print("FFmpeg Video Assembly & Caption Engine ready.")

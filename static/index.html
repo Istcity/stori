@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StoryTime Studio - 2D AI Storytime Animation Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-icon">
+        <i class="fa-solid fa-clapperboard"></i>
+      </div>
+      <div class="logo-text">
+        <h1>StoryTime Studio</h1>
+        <span>Local & Hybrid AI 2D Storytime Animator (MCP)</span>
+      </div>
+    </div>
+
+    <!-- Live MCP Nodes Status Bar -->
+    <div class="mcp-status-pill">
+      <div class="status-node">
+        <span class="status-dot"></span>
+        <span>LLM & Script MCP</span>
+      </div>
+      <div class="status-node">
+        <span id="comfyDot" class="status-dot comfy-offline"></span>
+        <span id="comfyLabel">ComfyUI (8188)</span>
+      </div>
+      <div class="status-node">
+        <span class="status-dot"></span>
+        <span>Audio / TTS MCP</span>
+      </div>
+      <div class="status-node">
+        <span class="status-dot"></span>
+        <span>FFmpeg Master (1080p)</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" onclick="location.reload()">
+        <i class="fa-solid fa-rotate"></i> Yenile
+      </button>
+      <button class="btn btn-accent btn-sm" id="btnDownloadVideo" style="display: none;">
+        <i class="fa-solid fa-download"></i> MP4 İndir
+      </button>
+    </div>
+  </header>
+
+  <!-- Studio Workspace -->
+  <main class="studio-container">
+
+    <!-- LEFT COLUMN: Script & Character Studio -->
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <i class="fa-solid fa-pen-nib"></i> Hikaye & Karakter Stüdyosu
+        </div>
+      </div>
+
+      <!-- Story Input -->
+      <div class="form-group">
+        <label class="form-label" for="storyTitleInput">Proje Başlığı</label>
+        <input type="text" id="storyTitleInput" value="My Most Chaotic Day">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="storyTextInput">Gerçek Hayat Hikayesi (Metin / Anlatım)</label>
+        <textarea id="storyTextInput" rows="4" placeholder="Buraya kişisel hikayenizi veya mikrofon dökümünü yazın..."></textarea>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+        <div class="form-group">
+          <label class="form-label" for="charNameInput">Karakter Adı</label>
+          <input type="text" id="charNameInput" value="Sinan">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pacingSelect">Anlatım Hızı</label>
+          <select id="pacingSelect">
+            <option value="medium" selected>Dengeli (Medium)</option>
+            <option value="fast">Hızlı / Dinamik (Fast)</option>
+            <option value="slow">Ayrıntılı (Slow)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="btnDecompose" style="width: 100%;">
+        <i class="fa-solid fa-scissors"></i> Hikayeyi Sahnelere Böl (LLM MCP)
+      </button>
+
+      <!-- Character Model Vault -->
+      <div class="panel-header" style="margin-top: 0.5rem;">
+        <div class="panel-title">
+          <i class="fa-solid fa-palette"></i> Karakter Renk Paleti
+        </div>
+        <button class="btn btn-secondary btn-sm" id="btnRegenChar" title="Model sayfasını yeniden çiz">
+          <i class="fa-solid fa-arrows-rotate"></i> Çiz
+        </button>
+      </div>
+
+      <div class="palette-grid">
+        <div class="color-picker-item">
+          <label>Saç</label>
+          <input type="color" id="hairColor" value="#2D1B18">
+        </div>
+        <div class="color-picker-item">
+          <label>Ten</label>
+          <input type="color" id="skinColor" value="#FFE0BD">
+        </div>
+        <div class="color-picker-item">
+          <label>Kapüşon</label>
+          <input type="color" id="hoodieColor" value="#2563EB">
+        </div>
+        <div class="color-picker-item">
+          <label>Çizgi</label>
+          <input type="color" id="lineColor" value="#1E293B">
+        </div>
+      </div>
+
+      <div class="character-preview-card">
+        <img id="anchorImg" src="/assets/characters/anchor.png" alt="Character Anchor Sheet">
+      </div>
+
+      <!-- Sound FX Quick Tester -->
+      <div class="panel-header" style="margin-top: 0.25rem;">
+        <div class="panel-title">
+          <i class="fa-solid fa-volume-high"></i> Telifsiz SFX Ses Testi
+        </div>
+      </div>
+      <div class="sfx-soundboard">
+        <button class="sfx-btn" onclick="playSfx('whoosh')">💨 Whoosh</button>
+        <button class="sfx-btn" onclick="playSfx('pop')">✨ Pop</button>
+        <button class="sfx-btn" onclick="playSfx('punch')">💥 Punch</button>
+        <button class="sfx-btn" onclick="playSfx('record_scratch')">📀 Scratch</button>
+        <button class="sfx-btn" onclick="playSfx('cricket')">🦗 Cırcır</button>
+        <button class="sfx-btn" onclick="playSfx('dramatic_boom')">⚡ Boom</button>
+      </div>
+
+    </section>
+
+    <!-- MIDDLE COLUMN: Storyboard & Scene Timeline -->
+    <section class="panel storyboard-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <i class="fa-solid fa-film"></i> Storyboard & Sahne Zaman Çizelgesi
+        </div>
+        <span class="badge badge-order" id="sceneCountBadge">0 Sahne</span>
+      </div>
+
+      <div class="timeline-scroll" id="timelineContainer">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: Video Theater, Subtitles & Master Render -->
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <i class="fa-solid fa-play"></i> Video Tiyatrosu (1080p 30fps)
+        </div>
+      </div>
+
+      <div class="theater-screen" id="theaterScreen">
+        <div class="video-placeholder">
+          <i class="fa-solid fa-circle-play"></i>
+          <span>Render Edilmiş Video Yok</span>
+        </div>
+      </div>
+
+      <!-- Voice & BGM Configuration -->
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: flex-end;">
+        <div class="form-group">
+          <label class="form-label" for="voiceSelect">Karakter Seslendirmeni (TTS / Voice)</label>
+          <select id="voiceSelect">
+            <option value="tr-TR-AhmetNeural">Türkçe - Ahmet (Doğal Anlatıcı)</option>
+          </select>
+        </div>
+        <button class="btn btn-secondary btn-icon" id="btnPlayBgm" title="Arka Plan Müziğini Dinle">
+          <i class="fa-solid fa-music"></i>
+        </button>
+      </div>
+
+      <!-- Kinetic Subtitle Styler -->
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="form-label">Kinetik Altyazı Stili (Word-Pop)</label>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <input type="checkbox" id="subtitlesToggle" checked style="width: auto;">
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Aktif</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.65rem; align-items: center; margin-top: 0.35rem;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">Vurgu Rengi:</span>
+          <input type="color" id="subtitleColor" value="#FFDE59">
+        </div>
+      </div>
+
+      <!-- Kinetic Subtitle Live Preview Box -->
+      <div class="subtitle-preview-box">
+        <div style="font-size: 0.68rem; color: var(--text-dim); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em;">
+          Canlı Kinetik Altyazı Önizlemesi
+        </div>
+        <div class="kinetic-demo-line" id="kineticDemoLine">
+          <span>HAYATIMIN</span> <span class="word-highlight">EN</span> <span>BÜYÜK</span> <span>REZİLLİĞİYDİ!</span>
+        </div>
+      </div>
+
+      <!-- Master One-Click Render -->
+      <button class="btn btn-accent" id="btnRenderAll" style="width: 100%; padding: 0.85rem; font-size: 1rem; justify-content: center;">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Tek Tıkla Videoyu Render Et (1080p)
+      </button>
+
+      <!-- Terminal Logs -->
+      <div class="form-group" style="margin-top: -0.25rem;">
+        <label class="form-label">İşlem Günlüğü (MCP Telemetri)</label>
+        <div class="terminal-window" id="terminalLogs">
+          <div class="log-line log-info">[System] StoryTime Studio engine initialized.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

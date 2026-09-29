@@ -1,0 +1,105 @@
+{
+  "project_id": "demo_story",
+  "project_title": "My Most Chaotic Day",
+  "raw_story_text": "O gün hayatımın en büyük rezilliğini yaşayacağımdan tamamen habersizdim. Sabah erkenden kalkıp okula doğru yola çıktım. Birden pantolonumun arkasının boydan boya yırtık olduğunu fark ettim!",
+  "render_settings": {
+    "resolution": "1920x1080",
+    "fps": 30,
+    "subtitle_style": "kinetic_pop",
+    "bgm_volume": 0.18,
+    "sfx_volume": 0.85,
+    "voice_volume": 1.0,
+    "include_subtitles": true,
+    "highlight_color": "#FFDE59",
+    "subtitle_font": "Arial"
+  },
+  "character_profile": {
+    "name": "Sinan",
+    "style_tag": "2d_minimalist_vector_storytime_cartoon",
+    "description": "Young adult, messy dark brown hair, oversized blue hoodie, expressive facial features",
+    "anchor_image_path": "projects/demo_story/anchor.png",
+    "palette": {
+      "hair": "#2D1B18",
+      "skin": "#FFE0BD",
+      "hoodie": "#2563EB",
+      "line": "#1E293B"
+    }
+  },
+  "scenes": [
+    {
+      "scene_id": 1,
+      "order": 1,
+      "duration_sec": 3.8,
+      "narration_text": "O gün hayatımın en büyük rezilliğini yaşayacağımdan tamamen habersizdim.",
+      "scene_type": "reaction_shot",
+      "character_action": "Sinan's face turns completely tomato-red, sinking into oversized hoodie collar like a cartoon turtle while smoke billows from ears",
+      "camera_shot": "extreme_close_up_shock",
+      "animation_guidance": "squash into hoodie collar, red blush expansion with steam particles",
+      "character_emotion": "embarrassed",
+      "visual_prompt": "hilarious cartoon reaction shot, young man sinking completely into oversized blue hoodie, face glowing bright red with cartoon steam poofs coming from ears",
+      "animation_mode": "slapstick_squash",
+      "sfx_cue": "cricket",
+      "sfx_offset_sec": 0.25,
+      "camera_motion": "slow_zoom_in",
+      "assets": {
+        "audio_clip": "projects/demo_story/scenes/audio/s1.wav",
+        "image_plate": "projects/demo_story/scenes/images/s1.png",
+        "video_clip": "projects/demo_story/scenes/clips/s1.mp4",
+        "mouth_cues": null,
+        "word_timestamps": null
+      },
+      "status": "ready"
+    },
+    {
+      "scene_id": 2,
+      "order": 2,
+      "duration_sec": 3.0,
+      "narration_text": "Sabah erkenden kalkıp okula doğru yola çıktım.",
+      "scene_type": "environmental_gag",
+      "character_action": "Sinan gesticulates wildly, flailing arms in cartoon agitation while background objects wobble",
+      "camera_shot": "dynamic_low_angle_crash_zoom",
+      "animation_guidance": "exaggerated body gesture snaps, dynamic arm smears",
+      "character_emotion": "happy_oblivious",
+      "visual_prompt": "expressive 2D storytime cartoon action illustration, Sinan reacting dynamically, flailing arms with comic emotion lines, vibrant 16:9 scene",
+      "animation_mode": "action",
+      "sfx_cue": "dramatic_boom",
+      "sfx_offset_sec": 0.25,
+      "camera_motion": "slow_zoom_in",
+      "assets": {
+        "audio_clip": "projects/demo_story/scenes/audio/s2.wav",
+        "image_plate": "projects/demo_story/scenes/images/s2.png",
+        "video_clip": "projects/demo_story/scenes/clips/s2.mp4",
+        "mouth_cues": null,
+        "word_timestamps": null
+      },
+      "status": "ready"
+    },
+    {
+      "scene_id": 3,
+      "order": 3,
+      "duration_sec": 3.8,
+      "narration_text": "Birden pantolonumun arkasının boydan boya yırtık olduğunu fark ettim!",
+      "scene_type": "slapstick",
+      "character_action": "Sinan freezes in terror, reaching behind in frantic disbelief as cold wind blows through a massive cartoon tear in trousers",
+      "camera_shot": "dynamic_low_angle_crash_zoom",
+      "animation_guidance": "sudden freeze-frame pop, exaggerated cartoon shock lines and sweat burst",
+      "character_emotion": "shocked",
+      "visual_prompt": "dramatic low angle slapstick cartoon shot, young man in blue hoodie realizing his pants are torn, eyes bulging out in comic shock, wind gust lines, dynamic comic impact",
+      "animation_mode": "crash_zoom",
+      "sfx_cue": "record_scratch",
+      "sfx_offset_sec": 0.25,
+      "camera_motion": "camera_shake",
+      "assets": {
+        "audio_clip": "projects/demo_story/scenes/audio/s3.wav",
+        "image_plate": "projects/demo_story/scenes/images/s3.png",
+        "video_clip": "projects/demo_story/scenes/clips/s3.mp4",
+        "mouth_cues": null,
+        "word_timestamps": null
+      },
+      "status": "ready"
+    }
+  ],
+  "output_video_path": "projects/demo_story/output/final_storytime.mp4",
+  "created_at": "2026-09-28 17:26:44",
+  "updated_at": "2026-09-28 17:29:00"
+}

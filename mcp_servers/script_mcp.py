@@ -172,6 +172,11 @@ Return ONLY a valid JSON array of objects conforming to:
                 anim_mode = "action"
                 prompt_action = f"expressive 2D storytime cartoon action illustration, {character_name} reacting dynamically, flailing arms with comic emotion lines, vibrant 16:9 scene"
 
+            if style_tag == "vyond_beach_family":
+                prompt_action = f"Vyond Business-Friendly vector explainer scene, tropical beach with waving family and Arab gentleman: {action}"
+            elif style_tag == "green_screen_modern_boy":
+                prompt_action = f"Modern 2.5D shaded vector mascot boy with red glasses and polo shirt on chroma key green screen: {action}"
+
             scenes.append({
                 "scene_id": idx,
                 "order": idx,

@@ -357,12 +357,28 @@ class CinematicActionArtist:
                 x_b = sx + side * 60
                 draw.ellipse([(min(x_a, x_b), sy - 50), (max(x_a, x_b), sy - 10)], fill=(255, 255, 255, 160))
 
+from mcp_servers.vyond_artist import VyondVectorArtist
+
 class CharacterSceneEngine:
     def __init__(self, comfy_host: str = "127.0.0.1", comfy_port: int = 8188):
         self.action_artist = CinematicActionArtist()
+        self.vyond_artist = VyondVectorArtist(1920, 1080)
 
-    def generate_character_anchor(self, character_name: str, palette: Dict[str, str], out_path: Path) -> Path:
-        return self.action_artist.render_anchor_sheet(character_name, palette, out_path)
+    def generate_character_anchor(
+        self,
+        character_name: str,
+        palette: Dict[str, str],
+        out_path: Path,
+        style_tag: str = "2d_minimalist_vector_storytime_cartoon"
+    ) -> Path:
+        if style_tag == "vyond_beach_family":
+            self.vyond_artist.render_scene(theme="tropical_beach", out_path=out_path)
+            return out_path
+        elif style_tag == "green_screen_modern_boy":
+            self.vyond_artist.render_scene(theme="green_screen", green_screen=True, out_path=out_path)
+            return out_path
+        else:
+            return self.action_artist.render_anchor_sheet(character_name, palette, out_path)
 
     def generate_scene_image(
         self,
@@ -373,17 +389,23 @@ class CharacterSceneEngine:
         visual_prompt: str,
         emotion: str,
         palette: Dict[str, str],
-        out_path: Path
+        out_path: Path,
+        style_tag: str = "2d_minimalist_vector_storytime_cartoon"
     ) -> Path:
-        return self.action_artist.render_cinematic_action_scene(
-            scene_id=scene_id,
-            scene_type=scene_type,
-            character_action=character_action,
-            camera_shot=camera_shot,
-            emotion=emotion,
-            palette=palette,
-            out_path=out_path
-        )
+        if style_tag == "vyond_beach_family":
+            return self.vyond_artist.render_scene(theme="tropical_beach", out_path=out_path)
+        elif style_tag == "green_screen_modern_boy":
+            return self.vyond_artist.render_scene(theme="green_screen", green_screen=True, out_path=out_path)
+        else:
+            return self.action_artist.render_cinematic_action_scene(
+                scene_id=scene_id,
+                scene_type=scene_type,
+                character_action=character_action,
+                camera_shot=camera_shot,
+                emotion=emotion,
+                palette=palette,
+                out_path=out_path
+            )
 
 if __name__ == "__main__":
     base = Path(__file__).resolve().parent.parent

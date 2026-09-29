@@ -125,6 +125,12 @@ function renderProjectUI() {
   document.getElementById("storyTextInput").value = p.raw_story_text || "";
   document.getElementById("charNameInput").value = p.character_profile?.name || "MainProtagonist";
 
+  // Style Selector
+  const styleSelect = document.getElementById("styleSelect");
+  if (styleSelect && p.character_profile?.style_tag) {
+    styleSelect.value = p.character_profile.style_tag;
+  }
+
   // Palette
   const pal = p.character_profile?.palette || {};
   document.getElementById("hairColor").value = pal.hair || "#2D1B18";
@@ -150,11 +156,20 @@ function renderProjectUI() {
 
 function updateAnchorPreview() {
   const img = document.getElementById("anchorImg");
+  if (!img) return;
   const rand = Math.random();
-  img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
-  img.onerror = () => {
-    img.src = "/assets/characters/anchor.png";
-  };
+  const style = state.project?.character_profile?.style_tag || document.getElementById("styleSelect")?.value;
+  
+  if (style === "vyond_beach_family") {
+    img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
+    img.onerror = () => { img.src = "/assets/characters/beach_family_replica.png"; };
+  } else if (style === "green_screen_modern_boy") {
+    img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
+    img.onerror = () => { img.src = "/assets/characters/green_screen_modern_boy.png"; };
+  } else {
+    img.src = `/projects_files/${state.activeProjectId}/anchor.png?t=${rand}`;
+    img.onerror = () => { img.src = "/assets/characters/anchor.png"; };
+  }
 }
 
 function renderScenesTimeline() {
@@ -227,6 +242,28 @@ function escapeHtml(text) {
 
 // 4. Action Handlers
 function setupEventListeners() {
+  // Style Selector Change
+  const styleSelect = document.getElementById("styleSelect");
+  if (styleSelect) {
+    styleSelect.addEventListener("change", async (e) => {
+      const selectedStyle = e.target.value;
+      if (state.project?.character_profile) {
+        state.project.character_profile.style_tag = selectedStyle;
+      }
+      updateAnchorPreview();
+      appendTerminalLog(`Görsel Animasyon Stili Seçildi: ${selectedStyle}`, "log-info");
+      
+      // Auto-save and regenerate anchor
+      await fetch(`/api/projects/${state.activeProjectId}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state.project)
+      });
+      await fetch(`/api/projects/${state.activeProjectId}/character-sheet`, { method: "POST" });
+      updateAnchorPreview();
+    });
+  }
+
   // Decompose Button
   document.getElementById("btnDecompose").addEventListener("click", async () => {
     const storyText = document.getElementById("storyTextInput").value.trim();
@@ -238,6 +275,9 @@ function setupEventListeners() {
     state.project.raw_story_text = storyText;
     state.project.project_title = document.getElementById("storyTitleInput").value.trim();
     state.project.character_profile.name = document.getElementById("charNameInput").value.trim();
+    if (styleSelect) {
+      state.project.character_profile.style_tag = styleSelect.value;
+    }
 
     appendTerminalLog("Running Scene Decomposition (LLM / Episodic Engine)...", "log-info");
     

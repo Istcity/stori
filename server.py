@@ -47,6 +47,7 @@ class CreateProjectRequest(BaseModel):
     project_title: str
     raw_story_text: str
     character_name: str = "MainProtagonist"
+    style_tag: str = "vyond_beach_family"
 
 class DecomposeRequest(BaseModel):
     pacing: str = "medium"
@@ -86,7 +87,7 @@ async def index():
 
 @app.get("/api/status")
 async def get_system_status():
-    comfy_ok = orchestrator.character_engine.comfy.check_connection()
+    comfy_ok = orchestrator.character_engine.comfy.check_connection() if hasattr(orchestrator.character_engine, "comfy") else False
     return {
         "status": "online",
         "engines": {
@@ -134,7 +135,8 @@ async def create_project(req: CreateProjectRequest):
         project_id=req.project_id,
         title=req.project_title,
         raw_story=req.raw_story_text,
-        character_name=req.character_name
+        character_name=req.character_name,
+        style_tag=req.style_tag
     )
     return p.model_dump()
 

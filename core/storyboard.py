@@ -48,6 +48,7 @@ class SceneItem(BaseModel):
     sfx_cue: Optional[str] = Field(default=None) # whoosh, pop, punch, record_scratch, cricket, dramatic_boom
     sfx_offset_sec: float = Field(default=0.0)
     camera_motion: str = Field(default="camera_shake")
+    animation_preset: str = Field(default="authentic_beach_with_boy") # authentic_beach_with_boy, authentic_beach_family, city_street_boy, modern_room_boy, authentic_green_screen_boy, storytime_cartoon
     assets: SceneAssets = Field(default_factory=SceneAssets)
     status: str = Field(default="draft")
 

@@ -172,6 +172,22 @@ Return ONLY a valid JSON array of objects conforming to:
                 anim_mode = "action"
                 prompt_action = f"expressive 2D storytime cartoon action illustration, {character_name} reacting dynamically, flailing arms with comic emotion lines, vibrant 16:9 scene"
 
+            # Context-Aware Scenario Detection for Per-Scene Dynamic Animation
+            lower_text = text.lower()
+            if any(w in lower_text for w in ["sahil", "plaj", "deniz", "tatil", "kum", "yüzme", "beach", "summer", "ocean", "güneş"]):
+                anim_preset = "authentic_beach_with_boy"
+            elif any(w in lower_text for w in ["aile", "akraba", "selam", "arap", "merhaba", "el salla", "wave"]):
+                anim_preset = "authentic_beach_family"
+            elif any(w in lower_text for w in ["sokak", "cadde", "okul", "yol", "otobüs", "yürü", "koş", "ilerle", "street", "city"]):
+                anim_preset = "city_street_boy"
+            elif any(w in lower_text for w in ["ev", "oda", "sabah", "kalktım", "hazırlandım", "uyandım", "home", "room", "morning"]):
+                anim_preset = "modern_room_boy"
+            elif any(w in lower_text for w in ["yeşil", "stüdyo", "tanıtım", "sunum", "green"]):
+                anim_preset = "authentic_green_screen_boy"
+            else:
+                presets_sequence = ["modern_room_boy", "city_street_boy", "authentic_beach_with_boy", "storytime_cartoon"]
+                anim_preset = presets_sequence[(idx - 1) % len(presets_sequence)]
+
             if style_tag == "vyond_beach_family":
                 prompt_action = f"Vyond Business-Friendly vector explainer scene, tropical beach with waving family and Arab gentleman: {action}"
             elif style_tag == "green_screen_modern_boy":
@@ -189,6 +205,7 @@ Return ONLY a valid JSON array of objects conforming to:
                 "character_emotion": emotion,
                 "visual_prompt": prompt_action,
                 "animation_mode": anim_mode,
+                "animation_preset": anim_preset,
                 "sfx_cue": sfx,
                 "sfx_offset_sec": 0.25,
                 "camera_motion": camera,

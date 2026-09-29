@@ -198,7 +198,17 @@ function renderScenesTimeline() {
   scenes.forEach((s, idx) => {
     const card = document.createElement("div");
     card.className = "scene-card";
-    const thumbSrc = s.assets?.image_plate ? `/${s.assets.image_plate}?t=${Date.now()}` : "/assets/characters/action_scene_test.png";
+    const preset = s.animation_preset || "authentic_beach_with_boy";
+    const thumbMap = {
+      "authentic_beach_with_boy": "/assets/stock_animations/thumb_composite_beach_boy.png",
+      "city_street_boy": "/assets/stock_animations/thumb_city_boy.png",
+      "modern_room_boy": "/assets/stock_animations/thumb_room_boy.png",
+      "authentic_beach_family": "/assets/stock_animations/thumb_beach_family.png",
+      "authentic_green_screen_boy": "/assets/stock_animations/thumb_boy_green_screen.png",
+      "storytime_cartoon": "/assets/characters/action_scene_test.png"
+    };
+    const defaultThumb = thumbMap[preset] || "/assets/stock_animations/thumb_composite_beach_boy.png";
+    const thumbSrc = s.assets?.image_plate ? `/${s.assets.image_plate}?t=${Date.now()}` : defaultThumb;
     
     const typeColors = {
       "physical_action": "background: rgba(14, 165, 233, 0.25); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.4);",
@@ -210,7 +220,7 @@ function renderScenesTimeline() {
 
     card.innerHTML = `
       <div class="scene-thumb">
-        <img src="${thumbSrc}" alt="Scene ${s.scene_id}" onerror="this.src='/assets/characters/action_scene_test.png'">
+        <img id="sceneThumb_${s.scene_id}" src="${thumbSrc}" alt="Scene ${s.scene_id}" onerror="this.src='${defaultThumb}'">
         <div class="scene-badge-row">
           <span class="badge badge-order">#${s.order}</span>
           <span class="badge badge-duration">${s.duration_sec.toFixed(1)}s</span>
@@ -225,17 +235,55 @@ function renderScenesTimeline() {
         <div style="font-size: 0.8rem; color: #38bdf8; background: rgba(15, 23, 42, 0.6); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #0284c7;">
           🏃 <b>Aksiyon:</b> ${escapeHtml(s.character_action || s.visual_prompt || "Fiziksel animasyon hareketi")}
         </div>
-        <div class="scene-meta-row">
+        
+        <!-- Per-Scene Animation Scenario Selector -->
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 4px; background: rgba(30, 41, 59, 0.5); padding: 4px 8px; border-radius: 6px;">
+          <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;"><i class="fa-solid fa-film"></i> Sahne Animasyonu:</span>
+          <select class="scene-anim-select" onchange="updateSceneAnimPreset(${s.scene_id}, this.value)" style="flex: 1; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; background: #0f172a; color: #f8fafc; border: 1px solid rgba(59, 130, 246, 0.4);">
+            <option value="authentic_beach_with_boy" ${preset === 'authentic_beach_with_boy' ? 'selected' : ''}>🌴🚶 Sahilde Yürüyen Genç & Aile</option>
+            <option value="city_street_boy" ${preset === 'city_street_boy' ? 'selected' : ''}>🏙️ Şehir Caddesinde Yürüyüş</option>
+            <option value="modern_room_boy" ${preset === 'modern_room_boy' ? 'selected' : ''}>🏠 Ev / Oda İçi</option>
+            <option value="authentic_beach_family" ${preset === 'authentic_beach_family' ? 'selected' : ''}>🏖️ Plaj Tatili (Sadece Aile)</option>
+            <option value="authentic_green_screen_boy" ${preset === 'authentic_green_screen_boy' ? 'selected' : ''}>🟩 Green Screen Genç</option>
+            <option value="storytime_cartoon" ${preset === 'storytime_cartoon' ? 'selected' : ''}>🎬 2D Karikatür Aksiyon / Slapstick</option>
+          </select>
+        </div>
+
+        <div class="scene-meta-row" style="margin-top: 4px;">
           <span class="meta-chip">🎥 <b>${s.camera_shot || s.camera_motion}</b></span>
           <span class="meta-chip">🎭 <b>${s.character_emotion}</b></span>
           ${s.sfx_cue ? `<span class="meta-chip chip-sfx" onclick="playSfx('${s.sfx_cue}')" style="cursor: pointer;">🔊 SFX: <b>${s.sfx_cue}</b> ▶</span>` : ""}
-          <span class="meta-chip">⚡ Mod: <b>${s.animation_mode}</b></span>
         </div>
       </div>
     `;
     container.appendChild(card);
   });
 }
+
+window.updateSceneAnimPreset = async function(sceneId, newPreset) {
+  const scene = state.project.scenes.find(s => s.scene_id === sceneId);
+  if (scene) {
+    scene.animation_preset = newPreset;
+    appendTerminalLog(`Sahne #${sceneId} için animasyon sahnesi değiştirildi: ${newPreset}`, "log-info");
+    const thumbMap = {
+      "authentic_beach_with_boy": "/assets/stock_animations/thumb_composite_beach_boy.png",
+      "city_street_boy": "/assets/stock_animations/thumb_city_boy.png",
+      "modern_room_boy": "/assets/stock_animations/thumb_room_boy.png",
+      "authentic_beach_family": "/assets/stock_animations/thumb_beach_family.png",
+      "authentic_green_screen_boy": "/assets/stock_animations/thumb_boy_green_screen.png",
+      "storytime_cartoon": "/assets/characters/action_scene_test.png"
+    };
+    const img = document.getElementById(`sceneThumb_${sceneId}`);
+    if (img && thumbMap[newPreset]) {
+      img.src = `${thumbMap[newPreset]}?t=${Date.now()}`;
+    }
+    await fetch(`/api/projects/${state.activeProjectId}/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state.project)
+    });
+  }
+};
 
 function escapeHtml(text) {
   const div = document.createElement("div");

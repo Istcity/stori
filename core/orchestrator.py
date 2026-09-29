@@ -144,17 +144,20 @@ class StoryTimeOrchestrator:
 
         beach_video = stock_dir / "scene_beach_family.mp4"
         boy_video = stock_dir / "character_boy_green_screen.mp4"
+        city_bg = stock_dir / "bg_city_street.png"
+        room_bg = stock_dir / "bg_modern_room.png"
 
         for scene in project.scenes:
+            anim_preset = getattr(scene, "animation_preset", None) or style_tag
             if progress_cb:
-                progress_cb(f"Rendering Authentic Scene {scene.scene_id} [{style_tag}]: {scene.character_action[:40]}...")
+                progress_cb(f"Rendering Dynamic Scene {scene.scene_id} [{anim_preset}]: {scene.character_action[:40]}...")
 
             plate_path = proj_dir / "scenes" / "images" / f"s{scene.scene_id}.png"
             clip_path = proj_dir / "scenes" / "clips" / f"s{scene.scene_id}.mp4"
             audio_clip_path = proj_dir / "scenes" / "audio" / f"s{scene.scene_id}.wav"
 
-            # 1. Authentic Video Animation Pipeline matching user downloaded reference movies
-            if style_tag in ["authentic_beach_with_boy", "hybrid_beach_boy"] and beach_video.exists() and boy_video.exists():
+            # 1. Beach with Boy Composite
+            if anim_preset in ["authentic_beach_with_boy", "hybrid_beach_boy"] and beach_video.exists() and boy_video.exists():
                 thumb_src = stock_dir / "thumb_composite_beach_boy.png"
                 if thumb_src.exists():
                     shutil.copy(thumb_src, plate_path)
@@ -169,7 +172,8 @@ class StoryTimeOrchestrator:
                     pos_x=140 + (scene.scene_id * 80) % 400
                 )
 
-            elif style_tag in ["authentic_beach_family", "vyond_beach_family"] and beach_video.exists():
+            # 2. Beach Family Only
+            elif anim_preset in ["authentic_beach_family", "vyond_beach_family"] and beach_video.exists():
                 thumb_src = stock_dir / "thumb_beach_family.png"
                 if thumb_src.exists():
                     shutil.copy(thumb_src, plate_path)
@@ -181,7 +185,40 @@ class StoryTimeOrchestrator:
                     audio_clip_path=audio_clip_path if audio_clip_path.exists() else None
                 )
 
-            elif style_tag in ["authentic_green_screen_boy", "green_screen_modern_boy"] and boy_video.exists():
+            # 3. City Street with Walking Boy
+            elif anim_preset in ["city_street_boy", "modern_city_street"] and city_bg.exists() and boy_video.exists():
+                thumb_src = stock_dir / "thumb_city_boy.png"
+                if thumb_src.exists():
+                    shutil.copy(thumb_src, plate_path)
+
+                self.video_engine.render_chroma_composite(
+                    bg_source=city_bg,
+                    character_source=boy_video,
+                    duration_sec=scene.duration_sec,
+                    out_mp4=clip_path,
+                    audio_clip_path=audio_clip_path if audio_clip_path.exists() else None,
+                    char_scale_height=560,
+                    pos_x=220 + (scene.scene_id * 60) % 500
+                )
+
+            # 4. Modern Room / Office with Boy
+            elif anim_preset in ["modern_room_boy", "modern_office"] and room_bg.exists() and boy_video.exists():
+                thumb_src = stock_dir / "thumb_room_boy.png"
+                if thumb_src.exists():
+                    shutil.copy(thumb_src, plate_path)
+
+                self.video_engine.render_chroma_composite(
+                    bg_source=room_bg,
+                    character_source=boy_video,
+                    duration_sec=scene.duration_sec,
+                    out_mp4=clip_path,
+                    audio_clip_path=audio_clip_path if audio_clip_path.exists() else None,
+                    char_scale_height=560,
+                    pos_x=260 + (scene.scene_id * 50) % 450
+                )
+
+            # 5. Green Screen Boy
+            elif anim_preset in ["authentic_green_screen_boy", "green_screen_modern_boy"] and boy_video.exists():
                 thumb_src = stock_dir / "thumb_boy_green_screen.png"
                 if thumb_src.exists():
                     shutil.copy(thumb_src, plate_path)
